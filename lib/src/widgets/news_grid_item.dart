@@ -1,10 +1,14 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //import '../../assets/images/news.png';
 
 class NewsGridItem extends StatelessWidget {
+  final String newsItemUrl;
   final String imageUrl;
   final String sourceName;
   final String author;
@@ -13,6 +17,7 @@ class NewsGridItem extends StatelessWidget {
   final String publishedAt;
 
   NewsGridItem({
+    @required this.newsItemUrl,
     @required this.imageUrl,
     @required this.sourceName,
     @required this.author,
@@ -21,14 +26,53 @@ class NewsGridItem extends StatelessWidget {
     @required this.publishedAt,
   });
 
+  // Callback to launch a news item in the default external browser
+  // on the device.
+  Future<void> _openNewsItem(BuildContext widgetContext) async {
+    if (await canLaunch(newsItemUrl)) {
+      await launch(newsItemUrl);
+    } else {
+      Scaffold.of(widgetContext).hideCurrentSnackBar();
+      Scaffold.of(widgetContext).showSnackBar(
+        SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.error,
+                color: Theme.of(widgetContext).errorColor,
+                size: 20,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                'Error opening item : ${(title.length > 20) ? title.substring(0, 20) : title}',
+                style: TextStyle(
+                  color: Theme.of(widgetContext).errorColor,
+                  fontSize: 18,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          duration: Duration(
+            seconds: 3,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    print('Published at ${DateFormat.yMMMd('en-US').format(DateTime.parse(publishedAt.trim())).toString()}');
+    print(
+        'Published at ${DateFormat.yMMMd('en-US').format(DateTime.parse(publishedAt.trim())).toString()}');
 
     return InkWell(
       borderRadius: BorderRadius.circular(6),
-      onTap: () {},
+      onTap: () => _openNewsItem(context),
       splashColor: Colors.purple,
       child: Card(
         elevation: 5,
@@ -93,7 +137,9 @@ class NewsGridItem extends StatelessWidget {
                         if (publishedAt != null)
                           Text(
                             // publishedAt,
-                            DateFormat.yMMMd('en-US').format(DateTime.parse(publishedAt.trim())).toString(),
+                            DateFormat.yMMMd('en-US')
+                                .format(DateTime.parse(publishedAt.trim()))
+                                .toString(),
                             style: TextStyle(
                               color: Colors.grey[500],
                               fontWeight: FontWeight.bold,
@@ -172,7 +218,7 @@ class NewsGridItem extends StatelessWidget {
                         : description,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width > 500 ? 16 : 19,
+                  fontSize: MediaQuery.of(context).size.width > 500 ? 16 : 18,
                   color: Colors.grey[600],
                 ),
               ),

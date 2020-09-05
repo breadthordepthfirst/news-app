@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SideDrawer extends StatelessWidget {
-
   final Function tapAction;
 
   SideDrawer({
-     @required this.tapAction,
+    @required this.tapAction,
   });
 
   @override
@@ -14,24 +13,50 @@ class SideDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Customize Granularity ? Pick one !'),
+            automaticallyImplyLeading: false,
+            title: Text(
+              'Pick a news stream',
+              style: TextStyle(
+                fontSize: 21,
+              ),
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.clear,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
           ),
           ListTile(
             leading: Icon(
-              Icons.view_headline,
+              Icons.line_style,
+              size: 20,
             ),
             title: Text(
               'Top Headlines',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 17,
+              ),
             ),
-            onTap: () => tapAction('Top Headlines'), 
+            onTap: () => tapAction('Top Headlines'),
           ),
           Divider(),
           ListTile(
             leading: Icon(
-              Icons.trending_up,
+              Icons.language,
+              size: 20,
             ),
-            title: Text('All News'),
-            onTap: () => tapAction('All News'),
+            title: Text(
+              'News',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 17,
+              ),
+            ),
+            onTap: () => tapAction('News'),
           ),
           Divider(),
         ],

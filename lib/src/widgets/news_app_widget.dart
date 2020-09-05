@@ -27,14 +27,18 @@ class _NewsAppState extends State<NewsApp> {
     var getReqUrl = '';
 
     if (currentStream == 'Top Headlines') {
+      // getReqUrl =
+      //     'https://newsapi.org/v2/top-headlines?country=us&apiKey=$NEWS_API_KEY';
       getReqUrl =
-          'https://newsapi.org/v2/top-headlines?country=us&apiKey=$NEWS_API_KEY';
-    } else if (currentStream == 'All News') {
+          'https://newsapi.org/v2/top-headlines?country=us';
+    } else if (currentStream == 'News') {
+      // getReqUrl =
+      //     'https://newsapi.org/v2/everything?q=news&apiKey=$NEWS_API_KEY';
       getReqUrl =
-          'https://newsapi.org/v2/everything?q=news&apiKey=$NEWS_API_KEY';
+          'https://newsapi.org/v2/everything?q=news';
     }
 
-    final getResponse = await http.get(getReqUrl);
+    final getResponse = await http.get(getReqUrl, headers: {'X-Api-Key' : NEWS_API_KEY,},);
     final newsData = convert.jsonDecode(getResponse.body);
     print(newsData);
     return newsData;
