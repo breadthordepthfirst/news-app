@@ -4,6 +4,18 @@
 .dart_tool/
 .packages
 build/
+
+# Files and directories created by: flutter create
+.idea/
+.metadata
+android/
+ios/
+news_app.iml
+test/
+
+# Project specific private files, with info like API keys
+lib/environment.dart
+
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
